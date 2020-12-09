@@ -1,0 +1,33 @@
+# This file is a template, and might need editing before it works on your project.
+# Official language image. Look for the different tagged releases at:
+# https://hub.docker.com/r/library/python/tags/
+
+image: python:3.7
+
+before_script:
+  - python --version
+  - pip install wheel
+  - pip install .
+
+stages:
+  - Code Analysis
+  - Test
+
+flake8:
+  stage: Code Analysis
+  script:
+  - pip install flake8 --quiet
+  - flake8 src/S3Library/.
+
+pylint:
+  stage: Code Analysis
+  script:
+  - pip install pylint --quiet
+  - pylint --rcfile=setup.cfg S3Library
+
+unit_test:
+  stage: Test
+  script:
+  - pip install pytest --quiet
+  - python setup.py test
+  - pytest
